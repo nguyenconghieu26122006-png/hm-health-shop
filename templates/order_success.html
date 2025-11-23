@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Đặt Hàng Thành Công - H&M Health{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
+        <h2 class="text-success">Đặt Hàng Thành Công!</h2>
+        <p class="lead">Cảm ơn bạn đã tin tưởng và mua sắm tại H&M Health</p>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Thông Tin Đơn Hàng</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Mã đơn hàng:</strong>
+                            <p class="text-primary fs-5">{{ order.order_code }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Ngày đặt:</strong>
+                            <p>{{ order.created_at }}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Thông Tin Người Nhận</h5>
+                    <p class="mb-1"><strong>Họ tên:</strong> {{ order.customer_name }}</p>
+                    <p class="mb-1"><strong>Số điện thoại:</strong> {{ order.customer_phone }}</p>
+                    <p class="mb-3"><strong>Địa chỉ:</strong> {{ order.customer_address }}</p>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Sản Phẩm Đã Đặt</h5>
+                    {% for item in order_items %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ item.product_name }} x{{ item.quantity }}</span>
+                        <strong>{{ item.subtotal | format_price }}</strong>
+                    </div>
+                    {% endfor %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Tổng cộng:</h5>
+                        <h4 class="text-danger">{{ order.total_amount | format_price }}</h4>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Lưu ý:</strong> Đơn hàng sẽ được giao trong 2-5 ngày làm việc. 
+                        Chúng tôi sẽ liên hệ với bạn sớm nhất để xác nhận đơn hàng.
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('products') }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-shopping-bag"></i> Tiếp tục mua sắm
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Về trang chủ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

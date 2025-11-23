@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Trang Chủ - H&M Health{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-success text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 mb-3">🏥 H&M Health Shop</h1>
+        <p class="lead mb-4">Sức khỏe - Hạnh phúc - Mỗi ngày</p>
+        <a href="{{ url_for('products') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-shopping-bag"></i> Mua sắm ngay
+        </a>
+    </div>
+</div>
+
+<!-- Categories -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Danh Mục Sản Phẩm</h2>
+    <div class="row g-4">
+        {% for category in categories %}
+        <div class="col-md-3">
+            <a href="{{ url_for('products', category=category.id) }}" class="text-decoration-none">
+                <div class="card text-center h-100 category-card">
+                    <div class="card-body">
+                        <i class="fas fa-pills fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <p class="card-text text-muted">{{ category.description }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Sản Phẩm Nổi Bật</h2>
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card product-card h-100">
+                {% if product.discount_price %}
+                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                        Giảm {{ ((product.price - product.discount_price) / product.price * 100) | int }}%
+                    </span>
+                {% endif %}
+                
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                
+                <div class="card-body">
+                    <span class="badge bg-info mb-2">{{ product.category_name }}</span>
+                    <h5 class="card-title">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none text-dark">
+                            {{ product.name }}
+                        </a>
+                    </h5>
+                    <p class="card-text text-muted">{{ product.description[:80] }}...</p>
+                    
+                    <div class="mb-3">
+                        {% if product.discount_price %}
+                            <span class="text-decoration-line-through text-muted">{{ product.price | format_price }}</span>
+                            <span class="text-danger fw-bold fs-5">{{ product.discount_price | format_price }}</span>
+                        {% else %}
+                            <span class="text-danger fw-bold fs-5">{{ product.price | format_price }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {% if product.stock > 0 %}
+                            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-secondary" disabled>Hết hàng</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('products') }}" class="btn btn-outline-success btn-lg">
+            Xem tất cả sản phẩm <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
