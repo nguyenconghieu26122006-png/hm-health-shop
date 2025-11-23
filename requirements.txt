@@ -9,3 +9,4 @@ python-dateutil==2.8.2
 
 # Thư viện bắt buộc: tạo mã đơn hàng ngẫu nhiên
 shortuuid==1.0.11
+gunicorn==21.2.0
